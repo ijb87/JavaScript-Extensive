@@ -1,5 +1,6 @@
 // jshint esversion: 6
 // jshint asi: true
+//  Create a function getSecondsToTomorrow() that returns the number of seconds till tomorrow.
 
 function getSecondsUntilTomorrow () {
   const today = new Date()
