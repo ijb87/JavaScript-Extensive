@@ -1,36 +1,44 @@
 // jshint esversion: 6
 // jshint asi: true
 
-// Write a function formatDate(date) that should format date as follows:
-//
-// If since date passed less than 1 second, then "right now".
-// Otherwise, if since date passed less than 1 minute, then "n sec. ago".
-// Otherwise, if less than an hour, then "m min. ago".
-// Otherwise, the full date in the format "DD.MM.YY HH:mm". That is: "day.month.year hours:minutes", all in 2-digit format, e.g. 31.12.16 10:00.
-
 function formatDate (date) {
-  const today = new Date()
-  const difference = today - date
-  if (difference < 1000) {
+  const diff = new Date() - date // the difference in milliseconds
+
+  if (diff < 1000) { // less than 1 second
     return 'right now'
-  } else if (difference < 60000) {
-    const seconds = difference / 1000
-    return (seconds + ' sec. ago')
-  } else if (difference < 3600000) {
-    const minutes = difference / 60000
-    return (minutes + ' min. ago')
-  } else {
-    const fullYear = date.getFullYear().toString()
-    const year = fullYear.slice(-2)
-    const month = date.getMonth() + 1
-    const day = date.getDate()
-    const hour = date.getHours()
-    const minutes = date.getMinutes()
-    return (day + '.' + month + '.' + year + ',' + ' ' + hour + ':' + minutes)
   }
+
+  const sec = Math.floor(diff / 1000) // convert diff to seconds
+
+  if (sec < 60) {
+    return sec + ' sec. ago'
+  }
+
+  const min = Math.floor(diff / 60000) // convert diff to minutes
+  if (min < 60) {
+    return min + ' min. ago'
+  }
+
+  // format the date
+  // add leading zeroes to single-digit day/month/hours/minutes
+  let d = date
+  d = [
+    '0' + d.getDate(),
+    '0' + (d.getMonth() + 1),
+    '' + d.getFullYear(),
+    '0' + d.getHours(),
+    '0' + d.getMinutes()
+  ].map(component => component.slice(-2)) // take last 2 digits of every component
+
+  // join the components into date
+  return d.slice(0, 3).join('.') + ' ' + d.slice(3).join(':')
 }
 
-window.alert(formatDate(new Date(new Date() - 1))) // 'right now'
-window.alert(formatDate(new Date(new Date() - 30 * 1000))) // '30 sec. ago'
-window.alert(formatDate(new Date(new Date() - 5 * 60 * 1000))) // '5 min. ago'
-window.alert(formatDate(new Date(new Date() - 86400 * 1000))) // yesterday's date
+window.alert(formatDate(new Date(new Date() - 1))) // "right now"
+
+window.alert(formatDate(new Date(new Date() - 30 * 1000))) // "30 sec. ago"
+
+window.alert(formatDate(new Date(new Date() - 5 * 60 * 1000))) // "5 min. ago"
+
+// yesterday's date like 31.12.2016, 20:00
+window.alert(formatDate(new Date(new Date() - 86400 * 1000)))
