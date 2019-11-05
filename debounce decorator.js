@@ -1,5 +1,6 @@
-function debounce (f, ms) {
+// The result of debounce (f, ms) decorator should be a wrapper that passes the call to f at maximum once per ms milliseconds.
 
+function debounce (f, ms) {
   let isCooldown = false
 
   return function () {
